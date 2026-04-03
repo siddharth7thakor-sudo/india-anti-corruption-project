@@ -1,0 +1,68 @@
+politician_id,relative_name,relationship,company_owner
+2,Priya Singh,Spouse,Rajesh Enterprises Ltd
+2,Rohan Singh,Child,Rajesh Enterprises Ltd
+3,Vivek Iyer,Brother,MedEquip Solutions
+1,Aryan Verma,Nephew,Asset Management Co
+4,Anjali Patel,Sister,HealthFirst Corpimport csv
+import re
+
+def fuzzy_match(name1, name2):
+    n1 = re.sub(r'[^a-zA-Z0-9]', '', name1.lower())
+    n2 = re.sub(r'[^a-zA-Z0-9]', '', name2.lower())
+    return n1 in n2 or n2 in n1
+
+def load_csv(file_path):
+    data = []
+    try:
+        with open(file_path, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                data.append(row)
+    except FileNotFoundError:
+        print(f\"Warning: {file_path} not found.\")
+    return data
+
+def detect_family_corruption():
+    politicians = load_csv('politicians.csv')
+    tenders = load_csv('tenders.csv')
+    family = load_csv('family_registry.csv')
+
+    # Build family network
+    family_companies = {}
+    for f in family:
+        p_id = f['politician_id']
+        company = f['company_owner']
+        relationship = f['relationship']
+        if p_id not in family_companies:
+            family_companies[p_id] = []
+        family_companies[p_id].append({
+            'company': company,
+            'relationship': relationship
+        })
+
+    print(\"=== FAMILY RELATIONSHIP CORRUPTION DETECTION ===\")
+    
+    for p in politicians:
+        p_id = p['politician_id']
+        p_name = p['name']
+        
+        # Check if this politician has family companies
+        if p_id in family_companies:
+            for fam_company_info in family_companies[p_id]:
+                company = fam_company_info['company']
+                relationship = fam_company_info['relationship']
+                
+                # Find all tenders won by this family company
+                company_tenders = [t for t in tenders if fuzzy_match(company, t['contractor'])]
+                
+                if company_tenders:
+                    print(f\"\
+{p_name} ({relationship} connection)\")  
+                    print(f\"  Family-owned Company: {company}\")
+                    print(f\"  Tenders Won: {len(company_tenders)}\")  
+                    total_value = sum(float(t['amount']) for t in company_tenders)
+                    print(f\"  Total Contract Value: ₹{total_value:.0f}\")
+                    print(f\"  🚩 FAMILY NEPOTISM ALERT\")
+
+if __name__ == \"__main__\":
+    detect_family_corruption()

@@ -1,0 +1,61 @@
+import csv
+
+def analyze_tender_concentration():
+    tenders = []
+    try:
+        with open('tenders.csv', newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                tenders.append(row)
+    except FileNotFoundError:
+        print("tenders.csv not found.")
+        return
+
+    # Group by ministry and contractor
+    ministry_totals = {}
+    contractor_by_ministry = {}
+
+    for t in tenders:
+        ministry = t.get('ministry', 'Unknown')
+        contractor = t.get('contractor', 'Unknown')
+        amount = float(t.get('amount', 0))
+
+        # Track ministry totals
+        if ministry not in ministry_totals:
+            ministry_totals[ministry] = 0
+            contractor_by_ministry[ministry] = {}
+        
+        ministry_totals[ministry] += amount
+        
+        # Track contractor concentration
+        if contractor not in contractor_by_ministry[ministry]:
+            contractor_by_ministry[ministry][contractor] = 0
+        contractor_by_ministry[ministry][contractor] += amount
+
+    print("=== TENDER CONCENTRATION ANALYSIS ===")
+    print("(Shows monopoly risk - when one contractor dominates a ministry)\n")
+
+    for ministry, total in ministry_totals.items():
+        print(f"\nMinistry: {ministry}")
+        print(f"Total Tender Value: ₹{total:.0f}")
+        print(f"Number of Contractors: {len(contractor_by_ministry[ministry])}")
+        
+        # Sort by value
+        top_contractors = sorted(
+            contractor_by_ministry[ministry].items(),
+            key=lambda x: x[1],
+            reverse=True
+        )[:3]
+        
+        print("Top Contractors:")
+        for contractor, value in top_contractors:
+            pct = (value / total) * 100
+            print(f"  {contractor}: ₹{value:.0f} ({pct:.1f}%)")
+            if pct > 50:
+                print(f"  🚨 MONOPOLY ALERT: Single contractor >50% of ministry budget!")
+            elif pct > 30:
+                print(f"  ⚠️ CONCENTRATION RISK: One contractor >30% of budget")
+
+if __name__ == "__main__":
+    analyze_tender_concentration()
+tender_concentration.py
