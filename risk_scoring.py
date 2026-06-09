@@ -12,13 +12,13 @@ def calculate_risk_scores():
 
     # Weights for risk factors
     WEIGHTS = {
-        'growth': 40,      # 40% weight to suspicious asset growth
-        'tenders': 30,     # 30% weight to tender wins
-        'conflicts': 30    # 30% weight to own-ministry conflicts
+        'growth': 40,    # 40% weight to suspicious asset growth
+        'tenders': 30,   # 30% weight to tender wins
+        'conflicts': 30  # 30% weight to own-ministry conflicts
     }
 
-    print(\"=== CORRUPTION RISK SCORING ===\")
-    
+    print("=== CORRUPTION RISK SCORING ===")
+
     for p in politicians:
         # Normalize scores (0-100)
         # Growth > 30% is high risk
@@ -37,16 +37,15 @@ def calculate_risk_scores():
             (conflict_score * (WEIGHTS['conflicts'] / 100))
         )
 
-        risk_level = \"LOW\"
+        risk_level = "LOW"
         if final_score > 70:
-            risk_level = \"CRITICAL 🚨\"
+            risk_level = "CRITICAL 🚨"
         elif final_score > 40:
-            risk_level = \"MEDIUM ⚠️\"
+            risk_level = "MEDIUM ⚠️"
 
-        print(f\"\
-Politician: {p['name']}\")
-        print(f\"  Risk Score: {final_score:.1f}/100\")
-        print(f\"  Risk Level: {risk_level}\")
+        print(f"\nPolitician: {p['name']}")
+        print(f" Risk Score: {final_score:.1f}/100")
+        print(f" Risk Level: {risk_level}")
 
-if __name__ == \"__main__\":
+if __name__ == "__main__":
     calculate_risk_scores()
