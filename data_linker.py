@@ -1,7 +1,6 @@
 """DATA LINKER: Links massive amounts of data (politicians, companies, tenders, assets)
 Handles 4.2M+ records and finds corruption patterns
 """
-
 import csv
 import pandas as pd
 from collections import defaultdict
@@ -30,7 +29,7 @@ with open("assets.csv", encoding="utf-8") as f:
     for row in csv.DictReader(f):
         pid = row["politician_id"]
         year = int(row["year"])
-        assets[pid][year] = float(row["total_assets"])
+        assets[pid][year] = float(row["declared_assets"])
 
 print(f"✓ Loaded {len(politicians)} politicians")
 print(f"✓ Loaded {len(companies)} companies")
@@ -42,7 +41,6 @@ print()
 # STEP 2: LINK TENDERS TO POLITICIANS (via companies)
 # ==============================================================================
 print("Linking tenders to politicians...")
-
 linked_tenders = []
 for tender in tenders:
     contractor = tender["contractor_name"]
@@ -62,7 +60,7 @@ for tender in tenders:
                 "politician_name": politician["name"],
                 "politician_id": politician_id,
                 "politician_role": politician["role"],
-                "politician_ministry": politician["ministry_control"],
+                "politician_ministry": politician.get("ministry_control", politician["role"]),
                 "relationship": company["relationship"],
                 "sector": company["sector"],
             })
@@ -81,15 +79,14 @@ print("="*80)
 print("SIGNAL 1: SAME-MINISTRY CONFLICTS (CRITICAL RISK)")
 print("="*80)
 print()
-
 same_ministry_tenders = []
 for t in linked_tenders:
     if t["politician_ministry"] in t["ministry"]:
         same_ministry_tenders.append(t)
         print(f"🚩 CRITICAL: {t['politician_name']} ({t['politician_role']})")
-        print(f"   Owns: {t['contractor']}")
-        print(f"   Won ₹{t['amount']:.0f} crore from {t['ministry']} (THEIR ministry!)")
-        print(f"   Relationship: {t['relationship']}")
+        print(f" Owns: {t['contractor']}")
+        print(f" Won ₹{t['amount']:.0f} crore from {t['ministry']} (THEIR ministry!)")
+        print(f" Relationship: {t['relationship']}")
         print()
 
 print(f"Total same-ministry tenders: {len(same_ministry_tenders)}")
@@ -101,11 +98,9 @@ print("="*80)
 print("SIGNAL 2: HIGH-VALUE CONTRACTS (>₹100 crore)")
 print("="*80)
 print()
-
 high_value = [t for t in linked_tenders if t["amount"] > 100]
 for t in sorted(high_value, key=lambda x: x["amount"], reverse=True):
     print(f"₹{t['amount']:.0f} crore | {t['politician_name']} | {t['contractor']}")
-
 print()
 print(f"Total high-value tenders: {len(high_value)}")
 print()
@@ -115,7 +110,6 @@ print("="*80)
 print("SIGNAL 3: MARKET CONCENTRATION (One company dominates)")
 print("="*80)
 print()
-
 concentration = defaultdict(lambda: {"total": 0, "count": 0})
 for t in linked_tenders:
     key = t["contractor"]
@@ -124,7 +118,6 @@ for t in linked_tenders:
 
 for contractor, data in sorted(concentration.items(), key=lambda x: x[1]["total"], reverse=True)[:10]:
     print(f"{contractor}: ₹{data['total']:.0f} cr ({data['count']} contracts)")
-
 print()
 
 # SIGNAL 4: Asset Growth vs Tender Wins
@@ -132,7 +125,6 @@ print("="*80)
 print("SIGNAL 4: ASSET GROWTH CORRELATION")
 print("="*80)
 print()
-
 for pid in politicians:
     if pid in assets and 2014 in assets[pid] and 2024 in assets[pid]:
         politician = politicians[pid]
@@ -144,9 +136,9 @@ for pid in politicians:
         tender_value = sum(t["amount"] for t in linked_tenders if t["politician_id"] == pid)
         
         if growth > 200:
-            print(f"⚠️  {politician['name']} ({politician['role']})")
-            print(f"   Asset growth: {growth:.0f}% (₹{asset_2014/10000000:.1f}cr → ₹{asset_2024/10000000:.1f}cr)")
-            print(f"   Tender wins: ₹{tender_value:.0f} crore")
+            print(f"⚠️ {politician['name']} ({politician['role']})")
+            print(f" Asset growth: {growth:.0f}% (₹{asset_2014/10000000:.1f}cr → ₹{asset_2024/10000000:.1f}cr)")
+            print(f" Tender wins: ₹{tender_value:.0f} crore")
             print()
 
 # ==============================================================================
@@ -166,7 +158,6 @@ with open("corruption_findings.csv", "w", newline="") as f:
     writer = csv.DictWriter(f, fieldnames=linked_tenders[0].keys())
     writer.writeheader()
     writer.writerows(sorted(linked_tenders, key=lambda x: x["amount"], reverse=True))
-
 print("✓ Saved findings to corruption_findings.csv")
 print()
 print("Analysis complete!")
