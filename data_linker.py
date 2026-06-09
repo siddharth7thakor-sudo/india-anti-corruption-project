@@ -17,7 +17,7 @@ with open("politicians.csv", encoding="utf-8") as f:
         politicians[row["politician_id"]] = row
 
 companies = {}
-with open("companies.csv", encoding="utf-8") as f:
+with open("family_registry.csv", encoding="utf-8") as f:
     for row in csv.DictReader(f):
         companies[row["company_name"]] = row
 
