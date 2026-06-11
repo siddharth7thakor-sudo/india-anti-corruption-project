@@ -1,1 +1,6 @@
 tp_id,scheme_name,ward,area_sqm,land_owner,tp_officer,sanction_date,status,remarks,description
+T001,Sanctioned Final Schemes,Multiple,82864200,Various,SMC Town Planning,NA,Sanctioned,74 schemes total,Final TP schemes fully implemented across Surat city. Total area 8286.42 hectares.
+T002,Sanctioned Preliminary Schemes,Multiple,23640700,Various,SMC Town Planning,NA,Sanctioned,17 schemes total,Preliminary schemes approved and in implementation phase. Total area 2364.07 hectares.
+T003,Sanctioned Draft Schemes,Multiple,93480400,Various,SMC Town Planning,NA,Sanctioned,49 schemes total,Draft schemes that have been sanctioned. Total area 9348.04 hectares.
+T004,Draft Schemes Submitted to Govt,Multiple,10798000,Various,SMC Town Planning,NA,Pending Govt Approval,6 schemes submitted,Draft schemes pending Gujarat Government final sanction. Total area 1079.80 hectares.
+T005,TP Scheme Update 2026,Multiple,210783300,Various,SMC Town Planning,2026-04-08,Active,Total 146 schemes,Overall TP scheme summary updated as of 08/04/2026. 146 schemes covering 21078.33 hectares.
