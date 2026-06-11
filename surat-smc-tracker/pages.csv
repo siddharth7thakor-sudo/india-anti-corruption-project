@@ -1,0 +1,6 @@
+page_id,page_name,url,status_code,content_length,fetched_at,tables_found,links_found
+tenders,Tenders & E-Marketplace,https://smc.gov.in/SMC_ONL/E-Tender/tenderHome.aspx,200,0,,0,0
+projects,Development Projects,https://smc.gov.in/SMC_ONL/Projects/default.aspx,200,0,,0,0
+tp,Town Planning (TP) Schemes,https://smc.gov.in/SMC_ONL/TP/default.aspx,200,0,,0,0
+works_committee,Works Committee,https://smc.gov.in/SMC_ONL/WorksCommittee/default.aspx,200,0,,0,0
+budget,Budget Documents,https://smc.gov.in/SMC_ONL/Budget/default.aspx,200,0,,0,0
