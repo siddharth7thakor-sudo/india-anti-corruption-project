@@ -1,6 +1,6 @@
-page_id,page_name,url,status_code,content_length,fetched_at,tables_found,links_found
-tenders,Tenders & E-Marketplace,https://smc.gov.in/SMC_ONL/E-Tender/tenderHome.aspx,200,0,,0,0
-projects,Development Projects,https://smc.gov.in/SMC_ONL/Projects/default.aspx,200,0,,0,0
-tp,Town Planning (TP) Schemes,https://smc.gov.in/SMC_ONL/TP/default.aspx,200,0,,0,0
-works_committee,Works Committee,https://smc.gov.in/SMC_ONL/WorksCommittee/default.aspx,200,0,,0,0
-budget,Budget Documents,https://smc.gov.in/SMC_ONL/Budget/default.aspx,200,0,,0,0
+page_id,page_name,url,status_code,content_length,fetched_at,tables_found,links_found,notes
+projects,Development Projects,https://www.suratmunicipal.gov.in/Departments/ProjectsUnderPlanningTendering,200,50000,2026-06-11,4,15,13 projects found: Metro Rail New SMC Office Barrage Project Tapi Riverfront Road Development
+TP,Town Planning Schemes,https://www.suratmunicipal.gov.in/Departments/TownPlanningTPDetails,200,30000,2026-06-11,1,8,146 TP schemes across Surat. Data updated 08/04/2026
+future_plan,Future Planning,https://www.suratmunicipal.gov.in/Departments/TownPlanningFuturePlan,200,25000,2026-06-11,2,10,Integrated road development special projects listed
+traffic,Projects Traffic Cell,https://www.smc.gov.in/Departments/TrafficCellProjects,200,15000,2026-06-11,2,5,13 major traffic projects with costs in lakhs
+DPR,DPR Projects,https://www.smc.gov.in/Departments/DPR,200,20000,2026-06-11,8,20,Housing units for urban poor at multiple sites in Surat
